@@ -3,7 +3,6 @@
 
 - Main application.
 - Manages engines and orchestrates the main loop.
-
 */
 
 #pragma once

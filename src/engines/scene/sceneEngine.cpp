@@ -15,7 +15,7 @@ SceneEngine::~SceneEngine() {}
 ////////////////////
 ////// Crates //////
 ////////////////////
-void SceneEngine::buildCrate(SceneCrate& crate)       { crate.objects = objects; }
+void SceneEngine::buildCrate(SceneCrate& crate) const { crate.objects = objects; }
 void SceneEngine::applyCrate(const SceneCrate& crate) { objects = crate.objects; }
 
 

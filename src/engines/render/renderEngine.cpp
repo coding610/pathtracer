@@ -68,7 +68,9 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
         else if (pair.first == std::string("wave")) { }
         else if (pair.first == std::string("pathtracer")) {
             bufferModule.createBuffer("camera", GL_UNIFORM_BUFFER, sizeof(CameraBufferCrate), 0);
-            bufferModule.createBuffer("spheres", GL_SHADER_STORAGE_BUFFER, 0, 1); // TODO
+
+            SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
+            bufferModule.createBuffer("spheres", GL_SHADER_STORAGE_BUFFER, sizeof(sceneCrate.objects), 1);
         }
     }}
 }

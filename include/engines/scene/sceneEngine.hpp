@@ -24,7 +24,7 @@ public:
     SceneEngine();
     ~SceneEngine();
 
-    void buildCrate(SceneCrate& crate);
+    void buildCrate(SceneCrate& crate) const;
     void applyCrate(const SceneCrate& crate);
 
     void init(const SceneCrate& crate);
