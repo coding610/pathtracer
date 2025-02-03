@@ -70,7 +70,7 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
             bufferModule.createBuffer("camera", GL_UNIFORM_BUFFER, sizeof(CameraBufferCrate), 0);
 
             SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
-            bufferModule.createBuffer("spheres", GL_SHADER_STORAGE_BUFFER, sizeof(sceneCrate.objects), 1);
+            bufferModule.createBuffer("spheres", GL_SHADER_STORAGE_BUFFER, sceneCrate.objects.size() * sizeof(Sphere), 1);
         }
     }}
 }
@@ -92,7 +92,9 @@ void RenderEngine::update(const SceneEngine& sceneEngine, const CameraEngine& ca
     } else if (shaderInUse == std::string("pathtracer")) {
         CameraBufferCrate cameraCrate; cameraEngine.buildCrate(cameraCrate);
         bufferModule.updateBuffer("camera", &cameraCrate, sizeof(CameraBufferCrate));
-        // bufferModule.updateBuffer("spheres", &sceneEngine.getObjects(), sceneEngine.getObjects().size() * sizeof(Sphere));
+
+        SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
+        bufferModule.updateBuffer("spheres", sceneCrate.objects.data(), sceneCrate.objects.size() * sizeof(Sphere));
     }
 
     ////// Draw Quad //////

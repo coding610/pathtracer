@@ -16,7 +16,7 @@ TODO:
 
 
 struct SceneCrate {
-    std::vector<Object3D> objects;
+    std::vector<Sphere> objects;
 };
 
 class SceneEngine {
@@ -30,7 +30,6 @@ public:
     void init(const SceneCrate& crate);
     void update();
 
-
 private:
-    std::vector<Object3D> objects;
+    std::vector<Sphere> objects;
 };

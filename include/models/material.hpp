@@ -10,5 +10,5 @@
 
 
 struct Material {
-    vmml::vec3f albedo;
+    alignas(16) vmml::vec3f albedo;
 };

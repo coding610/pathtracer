@@ -6,6 +6,7 @@
 #include <engines/render/renderEngine.hpp>
 #include <engines/camera/cameraEngine.hpp>
 #include <engines/ui/uiEngine.hpp>
+#include <models/object3D.hpp>
 #include <app.hpp>
 
 
@@ -14,6 +15,9 @@
 //////////////////////
 App::App() {
     SceneCrate sceneCrate;
+    sceneCrate.objects = {
+        { .position = {1, 1, 1}, .radius = 1, .material = {{1, 1, 1}} }
+    };
     sceneEngine.init(sceneCrate);
 
     CameraCrate cameraCrate;
