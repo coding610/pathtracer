@@ -9,6 +9,6 @@ out vec4 fragColor;
 
 void main() {
     Camera camera = {cameraPosition, cameraDirection, cameraFov, cameraFocalLength};
-    Ray ray; directRay(camera, ray); castRay(camera, spheres, ray);
+    Ray ray; directRay(camera, ray); castRay(camera, ray);
     fragColor = vec4(ray.albedo, 1);
 }

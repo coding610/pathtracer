@@ -1,6 +1,6 @@
 #version 450 core
 
-void directRay(Camera& camera, Ray& ray) {
+void directRay(Camera camera, inout Ray ray) {
     ray.direction = vec3(
         texCoord.x,
         texCoord.y,
@@ -8,5 +8,6 @@ void directRay(Camera& camera, Ray& ray) {
     );
 }
 
-void castRay(Camera& camera, Sphere[]& spheres, Ray& ray) {
+void castRay(Camera camera, inout Ray ray) {
+    // Todo :)
 }

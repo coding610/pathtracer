@@ -53,7 +53,7 @@ layout(std430, binding = 1) buffer sphereBuffer {
 
 /* --- START INCLUDED FILE: shaders/pathtracer/trace.glsl --- */
 
-void directRay(Camera& camera, Ray& ray) {
+void directRay(Camera camera, inout Ray ray) {
     ray.direction = vec3(
         texCoord.x,
         texCoord.y,
@@ -61,7 +61,8 @@ void directRay(Camera& camera, Ray& ray) {
     );
 }
 
-void castRay(Camera& camera, Sphere[]& spheres, Ray& ray) {
+void castRay(Camera camera, inout Ray ray) {
+    // Todo :)
 }
 
 /* --- END INCLUDED FILE: shaders/pathtracer/trace.glsl --- */
@@ -69,6 +70,6 @@ void castRay(Camera& camera, Sphere[]& spheres, Ray& ray) {
 
 void main() {
     Camera camera = {cameraPosition, cameraDirection, cameraFov, cameraFocalLength};
-    Ray ray; directRay(camera, ray); castRay(camera, spheres, ray);
+    Ray ray; directRay(camera, ray); castRay(camera, ray);
     fragColor = vec4(ray.albedo, 1);
 }
