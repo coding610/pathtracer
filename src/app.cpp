@@ -16,7 +16,7 @@
 App::App() {
     SceneCrate sceneCrate;
     sceneCrate.objects = {
-        { .position = {1, 1, 1}, .radius = 1, .material = {{1, 1, 1}} }
+        { .position = {0, 0, -1}, .radius = 2, .material = {{0.5, 1, 0}} }
     };
     sceneEngine.init(sceneCrate);
 
@@ -40,7 +40,6 @@ App::App() {
     uiEngine.init(uiCrate, windowEngine);
 
 }; App::~App() { }
-
 
 //////////////////
 ////// Main //////

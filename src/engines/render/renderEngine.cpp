@@ -59,7 +59,7 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
     ////// Load shaders //////
     for (const auto& pair : shaderStatuses) {
         const char* key = pair.first;
-        shaderModule.loadShader(key, std::format("shaders/{}/{}.vert.glsl", key, key).c_str(), std::format("shaders/{}/{}.frag.glsl", key, key).c_str());
+        shaderModule.loadShader(key, std::format("shaders/{}/vertex.glsl", key).c_str(), std::format("shaders/{}/fragment.glsl", key).c_str());
     }
 
     ////// Create buffers //////

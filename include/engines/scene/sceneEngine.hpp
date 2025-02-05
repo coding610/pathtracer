@@ -31,5 +31,5 @@ public:
     void update();
 
 private:
-    std::vector<Sphere> objects;
+    std::vector<Sphere> objects; // On the heap to be able to add objects runtime
 };
