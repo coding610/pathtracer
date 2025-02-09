@@ -4,7 +4,6 @@ struct Camera {
     vec3 position;
     vec3 direction;
     float fov;
-    float focalLength;
 };
 
 struct Material {

@@ -14,14 +14,12 @@ struct CameraCrate {
     vmml::vec3f position;
     vmml::vec3f direction;
     float fov;
-    float focalLength;
 };
 
 struct CameraBufferCrate {
     alignas(16) vmml::vec3f position;
     alignas(16) vmml::vec3f direction;
-    alignas(16) float fov;
-    alignas(16) float focalLength;
+    float fov;
 };
 
 class CameraEngine {
@@ -40,5 +38,4 @@ private:
     vmml::vec3f position;
     vmml::vec3f direction;
     float fov;
-    float focalLength;
 };

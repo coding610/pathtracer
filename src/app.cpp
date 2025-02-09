@@ -1,4 +1,3 @@
-// FIX THESE
 #include <GL/glew.h>
 
 #include <engines/window/windowEngine.hpp>
@@ -24,7 +23,6 @@ App::App() {
     cameraCrate.position    = {0, 0, 0};
     cameraCrate.direction   = {0, 0, -1};
     cameraCrate.fov         = 90;
-    cameraCrate.focalLength = 2;
     cameraEngine.init(cameraCrate);
 
     WindowCrate windowCrate;
@@ -33,7 +31,7 @@ App::App() {
     windowEngine.init(windowCrate);
 
     RenderCrate renderCrate;
-    renderCrate.shaderStatuses = {{"debug", 0}, {"wave", 0}, {"pathtracer", 1}};
+    renderCrate.shaderStatuses = {{"debug", {0, 0}}, {"wave", {0, 0}}, {"pathtracer", {1, 1}}};
     renderEngine.init(renderCrate, sceneEngine);
 
     UiCrate uiCrate;
@@ -48,7 +46,7 @@ void App::run() {
     while (!glfwWindowShouldClose(windowEngine.getWindow())) {
         sceneEngine.update();
         cameraEngine.update();
-        renderEngine.update(sceneEngine, cameraEngine);
+        renderEngine.update(sceneEngine, cameraEngine, windowEngine);
         uiEngine.update(renderEngine, sceneEngine, cameraEngine);
         windowEngine.update();
     }

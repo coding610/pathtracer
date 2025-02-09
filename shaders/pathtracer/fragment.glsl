@@ -8,7 +8,7 @@ out vec4 fragColor;
 [[ trace.glsl ]]
 
 void main() {
-    Camera camera = {cameraPosition, cameraDirection, cameraFov, cameraFocalLength};
-    Ray ray; directRay(camera, ray); castRay(camera, ray);
-    fragColor = vec4(ray.albedo, 1);
+    Camera camera = { cameraPosition, cameraDirection, cameraFov };
+    Ray ray; setRayDirection(camera, ray); castRay(camera, ray);
+    fragColor = vec4(ray.direction, 1);
 }

@@ -11,9 +11,9 @@ CameraEngine::~CameraEngine() { }
 ////////////////////
 ////// Crates //////
 ////////////////////
-void CameraEngine::buildCrate(CameraCrate& crate) const { crate = { position, direction, fov, focalLength }; }
-void CameraEngine::buildCrate(CameraBufferCrate& crate) const { crate = { position, direction, fov, focalLength }; }
-void CameraEngine::applyCrate(const CameraCrate& crate) { position = crate.position; direction = crate.direction; fov = crate.fov; focalLength = crate.focalLength; }
+void CameraEngine::buildCrate(CameraCrate& crate) const { crate = { position, direction, fov }; }
+void CameraEngine::buildCrate(CameraBufferCrate& crate) const { crate = { position, direction, fov }; }
+void CameraEngine::applyCrate(const CameraCrate& crate) { position = crate.position; direction = crate.direction; fov = crate.fov; }
 
 
 //////////////////
@@ -23,7 +23,6 @@ void CameraEngine::init(const CameraCrate& crate) {
     position = crate.position;
     direction = crate.direction;
     fov = crate.fov;
-    focalLength = crate.focalLength;
 }
 
 void CameraEngine::update() { }

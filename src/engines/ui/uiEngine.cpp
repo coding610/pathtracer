@@ -59,9 +59,9 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
         RenderCrate renderCrate; renderEngine.buildCrate(renderCrate);
 
         for (auto& [key, value] : renderCrate.shaderStatuses) {
-            if (ImGui::RadioButton(key, value)) {
-                for (auto& [k, v] : renderCrate.shaderStatuses) v = false;
-                renderCrate.shaderStatuses[key] = true;
+            if (ImGui::RadioButton(key, value.first)) {
+                for (auto& [k, v] : renderCrate.shaderStatuses) v.first = false;
+                renderCrate.shaderStatuses[key].first = true;
             }
         }
 
@@ -76,9 +76,8 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
         CameraCrate crate; cameraEngine.buildCrate(crate);
 
         ImGui::SliderFloat3("Position", &crate.position.x(), -10, 10);
-        ImGui::SliderFloat3("Direction", &crate.direction.x(), -1, 1);
-        ImGui::SliderFloat("Fov", &crate.fov, 0, 120);
-        ImGui::SliderFloat("Focal Length", &crate.focalLength, 0.5, 3);
+        ImGui::SliderFloat3("Direction", &crate.direction.x(), -10, 10);
+        ImGui::SliderFloat("Fov", &crate.fov, 30, 120);
 
         cameraEngine.applyCrate(crate);
     }

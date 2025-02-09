@@ -27,9 +27,9 @@ public:
     void update();
 
     ////// Getters //////
-    GLFWwindow* getWindow() const;
-    const vmml::vec2f& getDimensions() const;
-    const char* getTitle() const;
+    [[nodiscard]] GLFWwindow* getWindow() const;
+    [[nodiscard]] const vmml::vec2f& getDimensions() const;
+    [[nodiscard]] const char* getTitle() const;
 
 private:
     ////// Glfw //////
