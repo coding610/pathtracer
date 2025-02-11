@@ -9,7 +9,7 @@ EXE_NAME=$(EXE_PATH)main
 SRC=src/*.cpp src/engines/scene/*.cpp src/engines/camera/*.cpp src/engines/window/*.cpp src/engines/render/*.cpp src/engines/ui/*.cpp
 SRC_DIR=src
 INC_DIR=include
-OBJ_PATH=build/
+OBJ_PATH=build/app/
 CPP_VERSION=20
 
 # Add -O3 for preformance
@@ -41,7 +41,7 @@ compile:
 
 .PHONY:
 link:
-	$(CC) ./*.o ./imgui-build/*.o $(LDFLAGS)
+	$(CC) ./*.o ./build/imgui/*.o $(LDFLAGS)
 
 .PHONY:
 compile_imgui:
