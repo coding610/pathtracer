@@ -8,6 +8,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <GL/gl.h>
 
 #include <string>
@@ -26,10 +27,9 @@ public:
     void useShader(const char* name);
     void setUniform(const char* shaderName, const char* uniformName, const float& value);
 
-    void processMacros(const char* path, std::string& shaderSource);
-
 private:
-    GLuint compileShader(const char* path, GLenum shaderType);
+    GLuint compileShader(const char* name, const char* path, GLenum shaderType);
+    void processMacros(const char* name, const char* path, std::string& shaderSource);
 
     std::unordered_map<const char*, GLuint> shaders;
 };

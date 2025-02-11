@@ -11,7 +11,8 @@
 #include <engines/render/bufferModule.hpp>
 #include <engines/render/shaderModule.hpp>
 #include <models/object3D.hpp>
-#include <debug.hpp>
+#include <spdlog/spdlog.h>
+#include <utils/utils.hpp>
 
 
 //////////////////////
@@ -33,32 +34,16 @@ void RenderEngine::applyCrate(const RenderCrate& crate) { shaderStatuses = crate
 //////////////////
 void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine) {
     shaderStatuses = crate.shaderStatuses;
+
+    spdlog::info("Initializing \t shaderModule \t [4.1]");
     ShaderCrate shaderCrate; shaderModule.init(shaderCrate);
+    spdlog::info("Initializing \t bufferModule \t [4.2]");
     BufferCrate bufferCrate; bufferModule.init(bufferCrate);
 
-    ////// Setup fullscreen quad to draw on //////
-    float vertices[] = { -1.0f, -1.0f, 1.0f, -1.0f, 1.0f,  1.0f, -1.0f,  1.0f };
-    GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
-    
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    spdlog::info("Creating \t fullscreenQuad  [4.3]");
+    utils::setFullscreenQuad(VAO, VBO, EBO);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    ////// Load shaders //////
+    spdlog::info("Loading \t shaders \t [4.4]");
     for (const auto& pair : shaderStatuses) {
         if (!pair.second.first) continue;
 
@@ -66,6 +51,7 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
     }
 
     ////// Create buffers //////
+    spdlog::info("Creating \t buffers \t [4.5]");
     for (const auto& pair : shaderStatuses) { if (pair.second.first == 1 && pair.first == std::string("pathtracer")) {
         bufferModule.createBuffer("camera", GL_UNIFORM_BUFFER, sizeof(CameraBufferCrate), 0);
 

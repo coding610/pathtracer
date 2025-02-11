@@ -13,7 +13,6 @@
 #include <engines/scene/sceneEngine.hpp>
 #include <engines/camera/cameraEngine.hpp>
 #include <engines/ui/uiEngine.hpp>
-#include <debug.hpp>
 
 
 //////////////////////
@@ -36,7 +35,6 @@ void UiEngine::init(const UiCrate& crate, const WindowEngine& windowEngine) {
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui::StyleColorsDark();
-
 }
 
 void UiEngine::update(RenderEngine& renderEngine, const SceneEngine& sceneEngine, CameraEngine& cameraEngine) {

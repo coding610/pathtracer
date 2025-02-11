@@ -1,8 +1,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <spdlog/spdlog.h>
 
 #include <engines/window/windowEngine.hpp>
 #include <engines/camera/cameraEngine.hpp>
+#include <utils/utils.hpp>
 
 
 //////////////////////
@@ -28,19 +30,24 @@ void CameraEngine::init(const CameraCrate& crate, const WindowEngine& windowEngi
     target = crate.target;
     fov = crate.fov;
 
-    const glm::vec2 dim = windowEngine.getDimensions();
-    const float aspectRatio = dim.x / dim.y;
-    projection = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
-    view = glm::lookAt(position, target, glm::vec3(0, 1, 0));
-    viewProjection = projection * view;
-    inverseViewProjection = glm::inverse(viewProjection);
+    spdlog::info("Initializing \t Projections \t [2.1]");
+    utils::setProjections(
+        {position, target, fov},
+        windowEngine.getDimensions(),
+        projection,
+        view,
+        viewProjection,
+        inverseViewProjection
+    );
 }
 
 void CameraEngine::update(const WindowEngine& windowEngine) {
-    const glm::vec2 dim = windowEngine.getDimensions();
-    const float aspectRatio = dim.x / dim.y;
-    projection = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
-    view = glm::lookAt(position, target, glm::vec3(0, 1, 0));
-    viewProjection = projection * view;
-    inverseViewProjection = glm::inverse(viewProjection);
+    utils::setProjections(
+        {position, target, fov},
+        windowEngine.getDimensions(),
+        projection,
+        view,
+        viewProjection,
+        inverseViewProjection
+    );
 }
