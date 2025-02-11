@@ -1,5 +1,0 @@
--Iinclude
--Iimgui
--Ivmmlib
--std=c++20
--Wno-dangling-gsl
