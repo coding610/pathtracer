@@ -5,8 +5,7 @@
 #include <imgui_internal.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <vmmlib/vector.hpp>
-#include <unordered_map>
+#include <glm/glm.hpp>
 #include <cwctype>
 
 #include <engines/window/windowEngine.hpp>
@@ -75,8 +74,8 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
     if (ImGui::CollapsingHeader("Camera")) { ImGui::Indent();
         CameraCrate crate; cameraEngine.buildCrate(crate);
 
-        ImGui::SliderFloat3("Position", &crate.position.x(), -10, 10);
-        ImGui::SliderFloat3("Direction", &crate.direction.x(), -10, 10);
+        ImGui::SliderFloat3("Position", &crate.position.x, -10, 10);
+        ImGui::SliderFloat3("Target", &crate.target.x, -20, 20);
         ImGui::SliderFloat("Fov", &crate.fov, 30, 120);
 
         cameraEngine.applyCrate(crate);

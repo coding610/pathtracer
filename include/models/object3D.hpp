@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include <vmmlib/vector.hpp>
+#include <glm/glm.hpp>
 #include <models/material.hpp>
 
 
 struct Sphere {
-    vmml::vec3f position;
+    glm::vec3 position;
     float radius;
     Material material;
 };

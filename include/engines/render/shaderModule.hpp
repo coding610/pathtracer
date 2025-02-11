@@ -9,7 +9,8 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <vmmlib/vector.hpp>
+
+#include <string>
 #include <unordered_map>
 
 

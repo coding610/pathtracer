@@ -7,8 +7,7 @@ out vec4 fragColor;
 
 struct Camera {
     vec3 position;
-    vec3 direction;
-    float fov;
+    mat4 inverseViewProjection;
 };
 
 struct Material {
@@ -49,8 +48,7 @@ uniform float aspectRatio;
 
 layout(std140, binding = 0) uniform cameraBuffer {
     vec3 cameraPosition;
-    vec3 cameraDirection;
-    float cameraFov;
+    mat4 cameraInverseViewProjection;
 };
 
 layout(std430, binding = 1) buffer sphereBuffer {
@@ -63,16 +61,10 @@ layout(std430, binding = 1) buffer sphereBuffer {
 /* --- START INCLUDED FILE: shaders/pathtracer/trace.glsl --- */
 
 void setRayDirection(Camera camera, inout Ray ray) {
-    // Ray direction from camera perspective
-    vec3 rayCameraDirection = normalize(vec3(
-        texCoord.x * aspectRatio * tan(radians(camera.fov / 2)),
-        texCoord.y * tan(radians(camera.fov / 2)),
-        -1
-    ));
-
-    mat3 rotationMatrix = createRotationMatrix(camera.position, camera.direction, vec3(0, 1, 0));
-    vec3 rayWorldDirection = rotationMatrix * rayCameraDirection;
-    ray.direction = normalize(rayWorldDirection);
+    vec4 clipCoords = vec4(texCoord, -1.0, 1.0);
+    vec4 worldCoords = camera.inverseViewProjection * clipCoords;
+    worldCoords /= worldCoords.w;
+    ray.direction = normalize(worldCoords.xyz - camera.position);
 }
 
 void castRay(Camera camera, inout Ray ray) {
@@ -83,7 +75,7 @@ void castRay(Camera camera, inout Ray ray) {
 
 
 void main() {
-    Camera camera = { cameraPosition, cameraDirection, cameraFov };
+    Camera camera = { cameraPosition, cameraInverseViewProjection };
     Ray ray; setRayDirection(camera, ray); castRay(camera, ray);
     fragColor = vec4(ray.direction, 1);
 }

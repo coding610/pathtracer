@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
-#include <vmmlib/vector.hpp>
+#include <glm/glm.hpp>
 #include <stdexcept>
 
 #include <engines/window/windowEngine.hpp>
@@ -22,9 +22,9 @@ WindowEngine::~WindowEngine() {
 /////////////////////////////////
 ////// Setters and Getters //////
 /////////////////////////////////
-GLFWwindow*           WindowEngine::getWindow()     const { return window; }
-const vmml::vec2f&    WindowEngine::getDimensions() const { return dimensions;  }
-const char*           WindowEngine::getTitle()      const { return title; }
+GLFWwindow*           WindowEngine::getWindow()      const { return window; }
+const glm::vec2&    WindowEngine::getDimensions()  const { return dimensions;  }
+const char*           WindowEngine::getTitle()       const { return title; }
 
 
 //////////////////
@@ -42,7 +42,7 @@ void WindowEngine::init(const WindowCrate& crate) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(dimensions.x(), dimensions.y(), title, nullptr, nullptr);
+    window = glfwCreateWindow(dimensions.x, dimensions.y, title, nullptr, nullptr);
     if (!window) { throw std::runtime_error("Fatal Error: App::WindowEngine::init()::glfwCreateWindow()"); }
 
     glfwMakeContextCurrent(window);
@@ -51,7 +51,7 @@ void WindowEngine::init(const WindowCrate& crate) {
     ////// GLEW //////
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) { throw std::runtime_error("Fatal Error: App::WindowEngine::init()::glewInit()"); }
-    glViewport(0, 0, dimensions.x(), dimensions.y());
+    glViewport(0, 0, dimensions.x, dimensions.y);
     glDisable(GL_DEPTH_TEST);
 }
 

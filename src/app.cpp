@@ -13,22 +13,22 @@
 ////// Builders //////
 //////////////////////
 App::App() {
+    WindowCrate windowCrate;
+    windowCrate.dimensions = {1920, 1080};
+    windowCrate.title = "pathtracer";
+    windowEngine.init(windowCrate);
+    CameraCrate cameraCrate;
+    cameraCrate.position    = {0, 0, 0};
+    cameraCrate.target = {0, 0, -1};
+    cameraCrate.fov         = 90;
+    cameraEngine.init(cameraCrate, windowEngine);
+
     SceneCrate sceneCrate;
     sceneCrate.objects = {
         { .position = {0, 0, -1}, .radius = 2, .material = {{0.5, 1, 0}} }
     };
     sceneEngine.init(sceneCrate);
 
-    CameraCrate cameraCrate;
-    cameraCrate.position    = {0, 0, 0};
-    cameraCrate.direction   = {0, 0, -1};
-    cameraCrate.fov         = 90;
-    cameraEngine.init(cameraCrate);
-
-    WindowCrate windowCrate;
-    windowCrate.dimensions = {1920, 1080};
-    windowCrate.title = "pathtracer";
-    windowEngine.init(windowCrate);
 
     RenderCrate renderCrate;
     renderCrate.shaderStatuses = {{"debug", {0, 0}}, {"wave", {0, 0}}, {"pathtracer", {1, 1}}};
@@ -45,7 +45,7 @@ App::App() {
 void App::run() {
     while (!glfwWindowShouldClose(windowEngine.getWindow())) {
         sceneEngine.update();
-        cameraEngine.update();
+        cameraEngine.update(windowEngine);
         renderEngine.update(sceneEngine, cameraEngine, windowEngine);
         uiEngine.update(renderEngine, sceneEngine, cameraEngine);
         windowEngine.update();

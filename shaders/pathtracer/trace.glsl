@@ -1,17 +1,10 @@
 #version 450 core
 
 void setRayDirection(Camera camera, inout Ray ray) {
-    // Ray direction from camera (local) perspective/direction
-    vec3 rayCameraDirection = normalize(vec3(
-        texCoord.x * aspectRatio * tan(radians(camera.fov / 2)),
-        texCoord.y * tan(radians(camera.fov / 2)),
-        -1
-    ));
-
-    // Apply camera direction/world direction
-    mat3 rotationMatrix = createRotationMatrix(camera.position, camera.direction, vec3(0, 1, 0));
-    vec3 rayWorldDirection = rotationMatrix * rayCameraDirection;
-    ray.direction = normalize(rayWorldDirection);
+    vec4 clipCoords = vec4(texCoord, -1.0, 1.0);
+    vec4 worldCoords = camera.inverseViewProjection * clipCoords;
+    worldCoords /= worldCoords.w;
+    ray.direction = normalize(worldCoords.xyz - camera.position);
 }
 
 void castRay(Camera camera, inout Ray ray) {

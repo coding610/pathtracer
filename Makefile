@@ -14,7 +14,7 @@ CPP_VERSION=20
 
 # Add -O3 for preformance
 # For debbing, refrain to using -O3, and use -g
-CFLAGS := -O3 -Wall -I$(INC_DIR) -Ivmmlib -Iimgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
+CFLAGS := -O3 -Wall -I$(INC_DIR) -I/usr/include -Iimgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
 LDFLAGS := -lGL -lglfw -lGLEW
 
 #_____________________COMPILE______________________

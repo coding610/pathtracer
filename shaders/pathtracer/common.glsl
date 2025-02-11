@@ -2,8 +2,7 @@
 
 struct Camera {
     vec3 position;
-    vec3 direction;
-    float fov;
+    mat4 inverseViewProjection;
 };
 
 struct Material {

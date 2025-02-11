@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
+#include <glm/glm.hpp>
 #include <format>
 
 #include <engines/window/windowEngine.hpp>
@@ -92,10 +93,10 @@ void RenderEngine::update(const SceneEngine& sceneEngine, const CameraEngine& ca
     if (shaderInUse == std::string("wave")) {
         shaderModule.setUniform("wave", "time", glfwGetTime());
     } else if (shaderInUse == std::string("pathtracer")) {
-        vmml::vec2f dim = windowEngine.getDimensions();
-        shaderModule.setUniform("pathtracer", "windowWidth", dim.x());
-        shaderModule.setUniform("pathtracer", "windowHeight", dim.y());
-        shaderModule.setUniform("pathtracer", "aspectRatio", dim.x() / dim.y());
+        glm::vec2 dim = windowEngine.getDimensions();
+        shaderModule.setUniform("pathtracer", "windowWidth", dim.x);
+        shaderModule.setUniform("pathtracer", "windowHeight", dim.y);
+        shaderModule.setUniform("pathtracer", "aspectRatio", dim.x / dim.y);
 
         CameraBufferCrate cameraCrate; cameraEngine.buildCrate(cameraCrate);
         bufferModule.updateBuffer("camera", &cameraCrate, sizeof(CameraBufferCrate));

@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <vmmlib/vector.hpp>
+#include <glm/glm.hpp>
 
 
 struct Material {
-    alignas(16) vmml::vec3f albedo;
+    alignas(16) glm::vec3 albedo;
 };

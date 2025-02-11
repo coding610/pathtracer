@@ -2,7 +2,6 @@
 
 #include <engines/scene/sceneEngine.hpp>
 #include <models/object3D.hpp>
-#include <vmmlib/vector.hpp>
 
 
 //////////////////////

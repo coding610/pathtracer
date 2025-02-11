@@ -8,11 +8,11 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include <vmmlib/vector.hpp>
+#include <glm/glm.hpp>
 
 
 struct WindowCrate {
-    vmml::vec2f dimensions;
+    glm::vec2 dimensions;
     const char* title;
 };
 
@@ -28,12 +28,12 @@ public:
 
     ////// Getters //////
     [[nodiscard]] GLFWwindow* getWindow() const;
-    [[nodiscard]] const vmml::vec2f& getDimensions() const;
+    [[nodiscard]] const glm::vec2& getDimensions() const;
     [[nodiscard]] const char* getTitle() const;
 
 private:
     ////// Glfw //////
     GLFWwindow* window;
-    vmml::vec2f dimensions;
+    glm::vec2 dimensions;
     const char* title;
 };
