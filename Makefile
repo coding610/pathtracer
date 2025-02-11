@@ -14,8 +14,8 @@ CPP_VERSION=20
 
 # Add -O3 for preformance
 # For debbing, refrain to using -O3, and use -g
-CFLAGS := -O3 -Wall -I$(INC_DIR) -I/usr/include -Iimgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
-LDFLAGS := -lGL -lglfw -lGLEW
+CFLAGS := -O3 -Wall -I$(INC_DIR) -I/usr/include -Iextern/imgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
+LDFLAGS := -lGL -lglfw -lGLEW ./build/imgui/*.o
 
 #_____________________COMPILE______________________
 #_____SILENT COMPILATION ENABLED BELOW_____ 
@@ -41,11 +41,11 @@ compile:
 
 .PHONY:
 link:
-	$(CC) ./*.o ./build/imgui/*.o $(LDFLAGS)
+	$(CC) ./*.o $(LDFLAGS)
 
 .PHONY:
 compile_imgui:
-	$(CC) -c imgui/*.cpp -Wall -std=c++$(CPP_VERSION)
+	$(CC) -c extern/imgui/*.cpp -Wall -std=c++$(CPP_VERSION)
 
 #_____________________CLEAN________________________
 clean_opt: obj exe
