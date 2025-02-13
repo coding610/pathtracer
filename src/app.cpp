@@ -14,7 +14,7 @@
 ////// Builders //////
 //////////////////////
 App::App() {
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::debug);
 
     spdlog::info("Initializing \t windowEngine \t [1]");
     WindowCrate windowCrate;
@@ -31,12 +31,12 @@ App::App() {
 
     spdlog::info("Initializing \t sceneEngine \t [3]");
     SceneCrate sceneCrate;
-    sceneCrate.objects = { { .position = {0, 0, -1}, .radius = 2, .material = {{0.5, 1, 0}} } };
+    sceneCrate.objects = {{ .position = {0, 0, -1}, .radius = 2, .material = {{0.5, 1, 0}} }};
     sceneEngine.init(sceneCrate);
 
     spdlog::info("Initializing \t renderEngine \t [4]");
     RenderCrate renderCrate;
-    renderCrate.shaderStatuses = {{"debug", {0, 0}}, {"wave", {0, 0}}, {"pathtracer", {1, 1}}};
+    renderCrate.shaderStatuses = {{"dim", {0, 1}}, {"pathtracer", {1, 1}}};
     renderEngine.init(renderCrate, sceneEngine);
 
     spdlog::info("Initializing \t uiEngine \t [5]");
@@ -51,7 +51,7 @@ void App::run() {
     while (!glfwWindowShouldClose(windowEngine.getWindow())) {
         sceneEngine.update();
         cameraEngine.update(windowEngine);
-        renderEngine.update(sceneEngine, cameraEngine, windowEngine);
+        renderEngine.update(windowEngine, sceneEngine, cameraEngine);
         uiEngine.update(renderEngine, sceneEngine, cameraEngine);
         windowEngine.update();
     }

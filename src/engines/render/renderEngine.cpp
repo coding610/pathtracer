@@ -84,7 +84,7 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
     }}
 }
 
-void RenderEngine::update(const SceneEngine& sceneEngine, const CameraEngine& cameraEngine, const WindowEngine& windowEngine) {
+void RenderEngine::update(const WindowEngine& windowEngine, const SceneEngine& sceneEngine, const CameraEngine& cameraEngine) {
     ////// Clear screen //////
     glClear(GL_COLOR_BUFFER_BIT);
 

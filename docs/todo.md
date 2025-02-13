@@ -1,6 +1,3 @@
------------ 1 -----------
-- change vmml to glm [DOING]
-- view and proj mat
-
------------ 2 -----------
-- camera momement and mouse
+----------- todo -----------
+- dimming
+- app settings in yaml/json

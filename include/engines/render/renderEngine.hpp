@@ -35,7 +35,7 @@ public:
     ~RenderEngine();
 
     void init(const RenderCrate& crate, const SceneEngine& sceneEngine);
-    void update(const SceneEngine& sceneEngine, const CameraEngine& cameraEngine, const WindowEngine& windowEngine);
+    void update(const WindowEngine& windowEngine, const SceneEngine& sceneEngine, const CameraEngine& cameraEngine);
 
     void buildCrate(RenderCrate& crate) const;
     void applyCrate(const RenderCrate& crate);

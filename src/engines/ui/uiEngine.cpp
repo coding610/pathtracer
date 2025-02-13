@@ -57,7 +57,6 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
 
         for (auto& [key, value] : renderCrate.shaderStatuses) {
             if (ImGui::RadioButton(key, value.first)) {
-                for (auto& [k, v] : renderCrate.shaderStatuses) v.first = false;
                 renderCrate.shaderStatuses[key].first = true;
             }
         }

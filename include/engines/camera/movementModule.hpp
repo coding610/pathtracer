@@ -31,9 +31,15 @@ public:
     void update(const WindowEngine& windowEngine, glm::vec3& direction);
 
 private:
-    glm::vec2 lastMouse;
+    void setDeltaMouse(const WindowEngine& windowEngine, glm::vec2& deltaMouse);
+    void setCameraDirection(const glm::vec2& deltaMouse, glm::vec3& direction);
+    void toggleFocus(const WindowEngine& windowEngine);
 
+    glm::vec2 lastMouse;
     float yaw = 0;
     float pitch = 0;
     float sensitivity;
+
+    bool focused = 1;
+    bool escapePressed = 0;
 };
