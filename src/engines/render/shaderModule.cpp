@@ -21,7 +21,6 @@ ShaderModule::~ShaderModule() { }
 //////////////////
 ////// Main //////
 //////////////////
-void ShaderModule::init(const ShaderCrate& crate) { }
 void ShaderModule::useShader(const char* name) {
     glUseProgram(shaders.at(name));
 }

@@ -3,7 +3,7 @@
 ## **1. File Structure & Organization**
 
 ### **1.1. Includes**
-- Any file using OpenGL dependencies **must** include headers in this order:  
+- Any file using OpenGL dependencies should include headers in this order:  
   ```cpp
   #include <GL/glew.h>
   #include <GLFW/glfw3.h>
@@ -65,7 +65,7 @@
 ### **2.2. Modules**
 - **Modules** exist **only** inside their parent engine.
 - Modules **must not** interact with each other.
-- Must contain:
+- Should contain:
   - `init()`
   - `update()`
 - Stored as **private members** inside their parent engine.
@@ -100,7 +100,7 @@
 
 ## **4. Code Style**
 
-### **4.1. Function Structure**
+### **4.1. Function Structure (depricated)**
 - **Long functions** are preferred.
 - Splitting into smaller functions is allowed but should be **carefully considered**.
 

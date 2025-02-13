@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
 #include <glm/glm.hpp>
+#include <spdlog/spdlog.h>
 #include <format>
 
 #include <engines/window/windowEngine.hpp>
@@ -11,8 +12,33 @@
 #include <engines/render/bufferModule.hpp>
 #include <engines/render/shaderModule.hpp>
 #include <models/object3D.hpp>
-#include <spdlog/spdlog.h>
-#include <utils/utils.hpp>
+
+
+///////////////////
+////// Utils //////
+///////////////////
+void RenderUtils::setFullscreenQuad(GLuint& VAO, GLuint& VBO, GLuint& EBO) {
+    float vertices[] = { -1.0f, -1.0f, 1.0f, -1.0f, 1.0f,  1.0f, -1.0f,  1.0f };
+    GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
+    
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
 
 
 //////////////////////
@@ -33,15 +59,13 @@ void RenderEngine::applyCrate(const RenderCrate& crate) { shaderStatuses = crate
 ////// Main //////
 //////////////////
 void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine) {
-    shaderStatuses = crate.shaderStatuses;
+    applyCrate(crate);
 
-    spdlog::info("Initializing \t shaderModule \t [4.1]");
-    ShaderCrate shaderCrate; shaderModule.init(shaderCrate);
-    spdlog::info("Initializing \t bufferModule \t [4.2]");
-    BufferCrate bufferCrate; bufferModule.init(bufferCrate);
+    spdlog::info("Creating \t fullscreenQuad  [4.1]");
+    RenderUtils::setFullscreenQuad(VAO, VBO, EBO);
 
-    spdlog::info("Creating \t fullscreenQuad  [4.3]");
-    utils::setFullscreenQuad(VAO, VBO, EBO);
+    spdlog::info("Initializing \t shaderModule \t [4.2]");
+    spdlog::info("Initializing \t bufferModule \t [4.3]");
 
     spdlog::info("Loading \t shaders \t [4.4]");
     for (const auto& pair : shaderStatuses) {

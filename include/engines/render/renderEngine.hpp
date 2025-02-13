@@ -19,6 +19,11 @@
 #include <engines/render/bufferModule.hpp>
 #include <engines/render/shaderModule.hpp>
 
+namespace RenderUtils {
+
+void setFullscreenQuad(GLuint& VAO, GLuint& VBO, GLuint& EBO);
+
+} // RenderEngineUtils
 
 struct RenderCrate {
     std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses;

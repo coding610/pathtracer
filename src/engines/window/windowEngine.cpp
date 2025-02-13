@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
-#include <stdexcept>
 
 #include <engines/window/windowEngine.hpp>
 
@@ -42,7 +41,6 @@ void WindowEngine::init(const WindowCrate& crate) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 
     spdlog::info("Initializing \t window \t [1.1.1]");
     window = glfwCreateWindow(dimensions.x, dimensions.y, title, nullptr, nullptr);

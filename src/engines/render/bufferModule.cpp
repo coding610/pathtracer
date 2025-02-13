@@ -1,5 +1,7 @@
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <GL/gl.h>
+#include <spdlog/spdlog.h>
 
 #include <engines/render/bufferModule.hpp>
 
@@ -17,8 +19,8 @@ BufferModule::~BufferModule() {
 //////////////////
 ////// Main //////
 //////////////////
-void BufferModule::init(const BufferCrate& crate) { }
 void BufferModule::createBuffer(const char* name, GLenum type, size_t size, GLuint bindingPoint) {
+    spdlog::info("Creating \t buffer \t [4.4.[{}].1", name);
     GLuint buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(type, buffer);

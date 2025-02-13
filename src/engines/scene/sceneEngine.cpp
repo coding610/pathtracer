@@ -21,7 +21,7 @@ void SceneEngine::applyCrate(const SceneCrate& crate) { objects = crate.objects;
 //////////////////
 ////// Main //////
 //////////////////
-void SceneEngine::init(const SceneCrate& crate) { objects = crate.objects; }
+void SceneEngine::init(const SceneCrate& crate) { applyCrate(crate); }
 void SceneEngine::update() {
     glfwPollEvents();
 }

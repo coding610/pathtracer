@@ -14,12 +14,11 @@ CPP_VERSION=20
 
 # Add -O3 for preformance
 # For debbing, refrain to using -O3, and use -g
-CFLAGS := -Wall -I$(INC_DIR) -I/usr/include -Iextern/imgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
+CFLAGS := -Wall -I$(INC_DIR) -Iextern/imgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
 LDFLAGS := -lGL -lglfw -lGLEW -lfmt ./build/imgui/*.o
 
 #_____________________COMPILE______________________
 #_____SILENT COMPILATION ENABLED BELOW_____ 
-.SILENT: 
 .PHONY:
 all: compile link clean_opt run
 

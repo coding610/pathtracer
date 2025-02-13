@@ -14,13 +14,10 @@
 #include <unordered_map>
 
 
-struct BufferCrate { };
-
 class BufferModule {
 public:
     BufferModule();
     ~BufferModule();
-    void init(const BufferCrate& crate);
 
     void createBuffer(const char* name, GLenum type, size_t size, GLuint bindingPoint);
     void updateBuffer(const char* name, const void* data, size_t size);

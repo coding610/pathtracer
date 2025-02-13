@@ -8,8 +8,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <engines/window/windowEngine.hpp>
+#include <engines/camera/movementModule.hpp>
 
 
 struct CameraCrate {
@@ -22,6 +24,19 @@ struct CameraBufferCrate {
     alignas(16) glm::vec3 position;
     alignas(16) glm::mat4x4 inverseViewProjection;
 };
+
+namespace CameraUtils {
+
+void calculateProjections(
+    const CameraCrate& crate,
+    const glm::vec2& dimensions,
+    glm::mat4x4& projection,
+    glm::mat4x4& view,
+    glm::mat4x4& viewProjection,
+    glm::mat4x4& inverseViewProjection
+);
+
+} // CameraEngineUtils
 
 class CameraEngine {
 public:
@@ -36,6 +51,8 @@ public:
     void update(const WindowEngine& windowEngine);
 
 private:
+    MovementModule movementModule;
+
     glm::vec3 position;
     glm::vec3 target;
     float fov;

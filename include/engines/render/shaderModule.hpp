@@ -15,14 +15,11 @@
 #include <unordered_map>
 
 
-struct ShaderCrate { };
-
 class ShaderModule {
 public:
     ShaderModule();
     ~ShaderModule();
 
-    void init(const ShaderCrate& crate);
     void loadShader(const char* name, const char* vertPath, const char* fragPath);
     void useShader(const char* name);
     void setUniform(const char* shaderName, const char* uniformName, const float& value);
