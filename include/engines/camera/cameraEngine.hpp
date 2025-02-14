@@ -14,6 +14,8 @@
 #include <engines/camera/movementModule.hpp>
 
 
+class RenderEngine; // Forward Declaration
+
 struct CameraCrate {
     glm::vec3 position;
     glm::vec3 target;
@@ -48,7 +50,7 @@ public:
     void applyCrate(const CameraCrate& crate);
 
     void init(const CameraCrate& crate, const WindowEngine& windowEngine);
-    void update(const WindowEngine& windowEngine);
+    void update(const WindowEngine& windowEngine, RenderEngine& renderEngine);
 
 private:
     MovementModule movementModule;
@@ -62,3 +64,5 @@ private:
     glm::mat4x4 viewProjection;
     glm::mat4x4 inverseViewProjection;
 };
+
+#include <engines/render/renderEngine.hpp> // Forward Declaration

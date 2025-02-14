@@ -15,9 +15,11 @@
 
 #include <engines/window/windowEngine.hpp>
 #include <engines/scene/sceneEngine.hpp>
-#include <engines/camera/cameraEngine.hpp>
 #include <engines/render/bufferModule.hpp>
 #include <engines/render/shaderModule.hpp>
+
+
+class CameraEngine; // Forward Declaration
 
 namespace RenderUtils {
 
@@ -44,8 +46,9 @@ private:
     ShaderModule shaderModule;
     BufferModule bufferModule;
 
-    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses;
-    const char* shaderInUse;
+    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses; // id - { use program, loaded }
 
     GLuint VAO, VBO, EBO;
 };
+
+#include <engines/camera/cameraEngine.hpp> // Forward Declaration

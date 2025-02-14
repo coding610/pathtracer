@@ -3,6 +3,7 @@
 #include <spdlog/spdlog.h>
 
 #include <engines/window/windowEngine.hpp>
+#include <engines/render/renderEngine.hpp>
 #include <engines/camera/movementModule.hpp>
 #include <engines/camera/cameraEngine.hpp>
 
@@ -60,9 +61,9 @@ void CameraEngine::init(const CameraCrate& crate, const WindowEngine& windowEngi
     );
 }
 
-void CameraEngine::update(const WindowEngine& windowEngine) {
+void CameraEngine::update(const WindowEngine& windowEngine, RenderEngine& renderEngine) {
     glm::vec3 direction;
-    movementModule.update(windowEngine, direction);
+    movementModule.update(windowEngine, renderEngine, direction);
     target = position + direction;
 
     CameraUtils::calculateProjections(

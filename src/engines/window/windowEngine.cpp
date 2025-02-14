@@ -59,6 +59,14 @@ void WindowEngine::init(const WindowCrate& crate) {
 
     glViewport(0, 0, dimensions.x, dimensions.y);
     glDisable(GL_DEPTH_TEST);
+
+
+    ////// Init Locked Cursor. MovementModule handles updating it //////
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    
+    ////// Enable V-Sync //////
+    glfwSwapInterval(1);
 }
 
 void WindowEngine::update() {

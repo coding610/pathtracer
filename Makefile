@@ -1,73 +1,55 @@
 #_____________________VARIABLES____________________
 CC=clang++
 
-# FORMAT: bin/
-EXE_PATH:=bin/
+# Paths
+EXE_PATH=bin/
 EXE_NAME=$(EXE_PATH)main
 
+SRC=$(wildcard src/*.cpp src/engines/scene/*.cpp src/engines/camera/*.cpp src/engines/window/*.cpp src/engines/render/*.cpp src/engines/ui/*.cpp)
+OBJ=$(patsubst src/%.cpp, build/app/%.o, $(SRC))  # Convert .cpp -> .o
 
-SRC=src/*.cpp src/engines/scene/*.cpp src/engines/camera/*.cpp src/engines/window/*.cpp src/engines/render/*.cpp src/engines/ui/*.cpp
 SRC_DIR=src
 INC_DIR=include
 OBJ_PATH=build/app/
 CPP_VERSION=20
 
-# Add -O3 for preformance
-# For debbing, refrain to using -O3, and use -g
+# Flags
 CFLAGS := -Wall -I$(INC_DIR) -Iextern/imgui -std=c++$(CPP_VERSION) -Wno-reorder-ctor
-LDFLAGS := -lGL -lglfw -lGLEW -lfmt ./build/imgui/*.o
+LDFLAGS := -lGL -lglfw -lGLEW -lfmt $(wildcard build/imgui/*.o)
+
+# Ensure base directories exist
+$(shell mkdir -p $(OBJ_PATH) $(EXE_PATH))
 
 #_____________________COMPILE______________________
-#_____SILENT COMPILATION ENABLED BELOW_____ 
-.PHONY:
-all: compile link clean_opt run
+.PHONY: all debug clean run
 
-.PHONY:
-debug: debugcompile debug_clean
+all: $(EXE_NAME)
 
-.PHONY:
-debugcompile:
-	$(CC) --debug $(SRC) $(CFLAGS) $(LDFLAGS)
+$(EXE_NAME): $(OBJ)
+	@echo "[LINK] Building executable: $(EXE_NAME)"
+	@$(CC) $(OBJ) $(LDFLAGS) -o $@
 
-debug_clean:
-	rm -r $(EXE_PATH)debug.dSYM
-	mv a.out $(EXE_PATH)debug
-	mv a.out.dSYM $(EXE_PATH)debug.dSYM
+# Create missing directories before compiling
+build/app/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	@echo "[COMPILE] $< → $@"
+	@$(CC) -c $< $(CFLAGS) -o $@
 
-.PHONY:
-compile:
-	$(CC) -c $(SRC) $(CFLAGS)
+# Compile ImGui separately
+build/imgui/%.o: extern/imgui/%.cpp
+	@mkdir -p $(dir $@)
+	@echo "[COMPILE] ImGui: $< → $@"
+	@$(CC) -c $< $(CFLAGS) -o $@
 
-.PHONY:
-link:
-	$(CC) ./*.o $(LDFLAGS)
-
-.PHONY:
-compile_imgui:
-	$(CC) -c extern/imgui/*.cpp -Wall -std=c++$(CPP_VERSION)
+debug: CFLAGS += --debug
+debug: all
 
 #_____________________CLEAN________________________
-clean_opt: obj exe
-
-ifdef OBJ_PATH
-obj:
-	mv ./*.o $(OBJ_PATH)
-else
-obj:
-	mkdir -p $(OBJ_PATH)
-	mv ./*.o $(OBJ_PATH)
-endif
-
-ifdef EXE_PATH
-exe:
-	mkdir -p $(EXE_PATH)
-	mv a.out $(EXE_NAME)
-else
-exe:
-	mv a.out $(EXE_NAME)
-endif
+clean:
+	@echo "[CLEAN] Removing build files..."
+	@rm -rf build/app/ build/imgui/ $(EXE_NAME)
 
 #_____________________RUN__________________________
-.PHONY:
-run:
-	./$(EXE_NAME)
+run: all
+	@echo "[RUN] Executing $(EXE_NAME)..."
+	@./$(EXE_NAME)

@@ -36,7 +36,7 @@ App::App() {
 
     spdlog::info("Initializing \t renderEngine \t [4]");
     RenderCrate renderCrate;
-    renderCrate.shaderStatuses = {{"dim", {0, 1}}, {"pathtracer", {1, 1}}};
+    renderCrate.shaderStatuses = {{"dim", {0, 0}}, {"pathtracer", {1, 1}}};
     renderEngine.init(renderCrate, sceneEngine);
 
     spdlog::info("Initializing \t uiEngine \t [5]");
@@ -50,7 +50,7 @@ App::App() {
 void App::run() {
     while (!glfwWindowShouldClose(windowEngine.getWindow())) {
         sceneEngine.update();
-        cameraEngine.update(windowEngine);
+        cameraEngine.update(windowEngine, renderEngine);
         renderEngine.update(windowEngine, sceneEngine, cameraEngine);
         uiEngine.update(renderEngine, sceneEngine, cameraEngine);
         windowEngine.update();

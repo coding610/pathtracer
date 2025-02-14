@@ -52,14 +52,21 @@ RenderEngine::~RenderEngine() { }
 ////// Crates //////
 ////////////////////
 void RenderEngine::buildCrate(RenderCrate& crate) const { crate.shaderStatuses = shaderStatuses; }
-void RenderEngine::applyCrate(const RenderCrate& crate) { shaderStatuses = crate.shaderStatuses; }
+void RenderEngine::applyCrate(const RenderCrate& crate) {
+    ////// This will update only provided keys //////
+    for (const auto& [key, value] : crate.shaderStatuses) {
+        if (shaderStatuses.find(key) != shaderStatuses.end()) {
+            shaderStatuses[key] = value;
+        }
+    }
+}
 
 
 //////////////////
 ////// Main //////
 //////////////////
 void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine) {
-    applyCrate(crate);
+    shaderStatuses = crate.shaderStatuses;
 
     spdlog::info("Creating \t fullscreenQuad  [4.1]");
     RenderUtils::setFullscreenQuad(VAO, VBO, EBO);
@@ -88,34 +95,38 @@ void RenderEngine::update(const WindowEngine& windowEngine, const SceneEngine& s
     ////// Clear screen //////
     glClear(GL_COLOR_BUFFER_BIT);
 
-    ////// Shaders ///////
+
+    ////// Using Shaders ///////
     for (const auto& pair : shaderStatuses) { if (pair.second.first == 1) {
         if (!pair.second.second) {
             shaderStatuses[pair.first].second = 1;
             shaderModule.loadShader(pair.first, std::format("shaders/{}/vertex.glsl", pair.first).c_str(), std::format("shaders/{}/fragment.glsl", pair.first).c_str());
         }
 
-        shaderInUse = pair.first;
-        shaderModule.useShader(shaderInUse);
-        break;
+        const char* shaderInUse = pair.first; shaderModule.useShader(shaderInUse);
+
+        if (shaderInUse == std::string("pathtracer")) {
+            glm::vec2 dim = windowEngine.getDimensions();
+            shaderModule.setUniform("pathtracer", "windowWidth", dim.x);
+            shaderModule.setUniform("pathtracer", "windowHeight", dim.y);
+            shaderModule.setUniform("pathtracer", "aspectRatio", dim.x / dim.y);
+
+            CameraBufferCrate cameraCrate; cameraEngine.buildCrate(cameraCrate);
+            bufferModule.updateBuffer("camera", &cameraCrate, sizeof(CameraBufferCrate));
+
+            SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
+            bufferModule.updateBuffer("spheres", sceneCrate.objects.data(), sceneCrate.objects.size() * sizeof(Sphere));
+        } else if (shaderInUse == std::string("dim")) {
+            glm::vec2 dim = windowEngine.getDimensions();
+            shaderModule.setUniform("dim", "windowWidth", dim.x);
+            shaderModule.setUniform("dim", "windowHeight", dim.y);
+            shaderModule.setUniform("dim", "dimFactor", 0.02);
+            // Work in progress. Activate framebuffers etc. etc.
+        }
+
+        ////// Draw For Shader(s) To Draw On //////
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }}
 
-    if (shaderInUse == std::string("wave")) {
-        shaderModule.setUniform("wave", "time", glfwGetTime());
-    } else if (shaderInUse == std::string("pathtracer")) {
-        glm::vec2 dim = windowEngine.getDimensions();
-        shaderModule.setUniform("pathtracer", "windowWidth", dim.x);
-        shaderModule.setUniform("pathtracer", "windowHeight", dim.y);
-        shaderModule.setUniform("pathtracer", "aspectRatio", dim.x / dim.y);
-
-        CameraBufferCrate cameraCrate; cameraEngine.buildCrate(cameraCrate);
-        bufferModule.updateBuffer("camera", &cameraCrate, sizeof(CameraBufferCrate));
-
-        SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
-        bufferModule.updateBuffer("spheres", sceneCrate.objects.data(), sceneCrate.objects.size() * sizeof(Sphere));
-    }
-
-    ////// Draw Quad //////
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

@@ -4,6 +4,7 @@
 #include <spdlog/spdlog.h>
 
 #include <engines/window/windowEngine.hpp>
+#include <engines/render/renderEngine.hpp>
 #include <engines/camera/movementModule.hpp>
 
 
@@ -15,21 +16,29 @@ void MovementModule::buildCrate(MovementCrate& crate) { crate = { sensitivity };
 void MovementModule::setCrate(const MovementCrate& crate) { sensitivity = crate.sensitivity; }
 
 void MovementModule::init(const MovementCrate& crate) { setCrate(crate); }
-void MovementModule::update(const WindowEngine& windowEngine, glm::vec3& direction) {
-    glm::vec2 deltaMouse; setDeltaMouse(windowEngine, deltaMouse);
-    setCameraDirection(deltaMouse, direction);
-    toggleFocus(windowEngine);
+void MovementModule::update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction) {
+    if (focused) {
+        glm::vec2 deltaMouse; setDeltaMouse(windowEngine, deltaMouse);
+        setCameraDirection(deltaMouse, direction);
+    } else {
+        direction = {0, 0, 0};
+    }
+
+    toggleFocus(windowEngine, renderEngine);
 }
 
 void MovementModule::setDeltaMouse(const WindowEngine& windowEngine, glm::vec2& deltaMouse) {
-    double x, y;
-    glfwGetCursorPos(windowEngine.getWindow(), &x, &y);
-    deltaMouse = glm::vec2(x, y) - lastMouse;
-    lastMouse = glm::vec2(x, y);
+    glm::vec2 midPoint = { windowEngine.getDimensions().x / 2, windowEngine.getDimensions().y / 2 };
+
+    double x, y; glfwGetCursorPos(windowEngine.getWindow(), &x, &y);
+    deltaMouse = glm::vec2(x, y) - midPoint;
 
     ////// Prevent wayland mouse hopping //////
     if (deltaMouse.x > 5000 || deltaMouse.x < -5000) deltaMouse.x = 0;
     if (deltaMouse.y > 5000 || deltaMouse.y < -5000) deltaMouse.y = 0;
+
+    ////// Set mouse in the middle //////
+    glfwSetCursorPos(windowEngine.getWindow(), midPoint.x, midPoint.y);
 }
 
 void MovementModule::setCameraDirection(const glm::vec2& deltaMouse, glm::vec3& direction) {
@@ -42,12 +51,27 @@ void MovementModule::setCameraDirection(const glm::vec2& deltaMouse, glm::vec3& 
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 }
 
-void MovementModule::toggleFocus(const WindowEngine& windowEngine) {
+void MovementModule::toggleFocus(const WindowEngine& windowEngine, RenderEngine& renderEngine) {
     int state = glfwGetKey(windowEngine.getWindow(), GLFW_KEY_ESCAPE);
-    if (state == GLFW_PRESS && !escapePressed) { escapePressed = true; focused = !focused;
-        if (focused) glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        else glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    } else if (state == GLFW_RELEASE) { escapePressed = false; }
+    if (state == GLFW_PRESS && !escapePressed) {
+        escapePressed = true;
+        focused = !focused;
 
-    if (!focused) return;
+        if (focused) {
+            glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+            RenderCrate crate;
+            crate.shaderStatuses = {{"dim", {0, 1}}};
+            renderEngine.applyCrate(crate);
+        } else {
+            glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            RenderCrate crate;
+            renderEngine.buildCrate(crate);
+            crate.shaderStatuses = {{"dim", {1, crate.shaderStatuses["dim"].second}}};
+            renderEngine.applyCrate(crate);
+        }
+    } else if (state == GLFW_RELEASE) {
+        escapePressed = false;
+    }
 }

@@ -31,7 +31,7 @@ void UiEngine::init(const UiCrate& crate, const WindowEngine& windowEngine) {
     ImGuiIO& io = ImGui::GetIO(); (void) io;
 
     ImGui_ImplGlfw_InitForOpenGL(windowEngine.getWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 430 core");
+    ImGui_ImplOpenGL3_Init("#version 450 core");
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui::StyleColorsDark();
@@ -57,7 +57,7 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
 
         for (auto& [key, value] : renderCrate.shaderStatuses) {
             if (ImGui::RadioButton(key, value.first)) {
-                renderCrate.shaderStatuses[key].first = true;
+                renderCrate.shaderStatuses[key].first = !renderCrate.shaderStatuses[key].first;
             }
         }
 

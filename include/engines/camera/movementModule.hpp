@@ -15,6 +15,8 @@
 #include <engines/window/windowEngine.hpp>
 
 
+class RenderEngine; // Forward Declaration
+
 struct MovementCrate {
     float sensitivity;
 };
@@ -28,18 +30,19 @@ public:
     void setCrate(const MovementCrate& crate);
 
     void init(const MovementCrate& crate);
-    void update(const WindowEngine& windowEngine, glm::vec3& direction);
+    void update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction);
 
 private:
     void setDeltaMouse(const WindowEngine& windowEngine, glm::vec2& deltaMouse);
     void setCameraDirection(const glm::vec2& deltaMouse, glm::vec3& direction);
-    void toggleFocus(const WindowEngine& windowEngine);
+    void toggleFocus(const WindowEngine& windowEngine, RenderEngine& renderEngine);
 
-    glm::vec2 lastMouse;
     float yaw = 0;
     float pitch = 0;
     float sensitivity;
 
-    bool focused = 1;
-    bool escapePressed = 0;
+    bool focused = true;
+    bool escapePressed = false;
 };
+
+#include <engines/render/renderEngine.hpp> // Forward Declaration
