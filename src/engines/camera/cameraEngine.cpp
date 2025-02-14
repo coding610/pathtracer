@@ -63,8 +63,9 @@ void CameraEngine::init(const CameraCrate& crate, const WindowEngine& windowEngi
 
 void CameraEngine::update(const WindowEngine& windowEngine, RenderEngine& renderEngine) {
     glm::vec3 direction;
-    movementModule.update(windowEngine, renderEngine, direction);
-    target = position + direction;
+    if (movementModule.update(windowEngine, renderEngine, direction)) { // Returns true when focused
+        target = position + direction;
+    }
 
     CameraUtils::calculateProjections(
         {position, target, fov},

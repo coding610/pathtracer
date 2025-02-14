@@ -1,12 +1,14 @@
 #version 450 core
 
+in vec2 texCoord;
 out vec4 fragColor;
-unfirom sampler2D pathtracerTexture;
-unfirom float dimFactor;
-unfirom float windowWidth;
+
+uniform float windowWidth;
 uniform float windowHeight;
+uniform float dimFactor;
+uniform sampler2D pathtracerTexture;
 
 void main() {
-    vec4 tracerColor = texture(pathtracerTexture, gl_FragCoord.xy / vec2(windowX, windowY));
-    FragColor = tracerColor * (1.0 - dimFactor);
+    vec4 color = texture(pathtracerTexture, texCoord);
+    fragColor = vec4(color.rgb * dimFactor, color.a);
 }

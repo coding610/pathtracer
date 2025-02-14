@@ -30,7 +30,7 @@ public:
     void setCrate(const MovementCrate& crate);
 
     void init(const MovementCrate& crate);
-    void update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction);
+    bool update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction); // Returns focused.
 
 private:
     void setDeltaMouse(const WindowEngine& windowEngine, glm::vec2& deltaMouse);

@@ -46,9 +46,11 @@ private:
     ShaderModule shaderModule;
     BufferModule bufferModule;
 
-    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses; // id - { use program, loaded }
+    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses; // id - { use program, loaded }, in order of render
 
-    GLuint VAO, VBO, EBO;
+    GLuint VAO, VBO, EBO;       // Move these to bufferModule
+    GLuint dimFBO, dimTexture;  // Move these to bufferModule
+
 };
 
 #include <engines/camera/cameraEngine.hpp> // Forward Declaration

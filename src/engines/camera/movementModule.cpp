@@ -16,15 +16,12 @@ void MovementModule::buildCrate(MovementCrate& crate) { crate = { sensitivity };
 void MovementModule::setCrate(const MovementCrate& crate) { sensitivity = crate.sensitivity; }
 
 void MovementModule::init(const MovementCrate& crate) { setCrate(crate); }
-void MovementModule::update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction) {
-    if (focused) {
-        glm::vec2 deltaMouse; setDeltaMouse(windowEngine, deltaMouse);
-        setCameraDirection(deltaMouse, direction);
-    } else {
-        direction = {0, 0, 0};
-    }
-
+bool MovementModule::update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction) {
+    glm::vec2 deltaMouse; setDeltaMouse(windowEngine, deltaMouse);
+    setCameraDirection(deltaMouse, direction);
     toggleFocus(windowEngine, renderEngine);
+
+    return focused;
 }
 
 void MovementModule::setDeltaMouse(const WindowEngine& windowEngine, glm::vec2& deltaMouse) {
@@ -60,16 +57,16 @@ void MovementModule::toggleFocus(const WindowEngine& windowEngine, RenderEngine&
         if (focused) {
             glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-            RenderCrate crate;
-            crate.shaderStatuses = {{"dim", {0, 1}}};
-            renderEngine.applyCrate(crate);
+            // RenderCrate crate;
+            // crate.shaderStatuses = {{"dim", {0, 1}}};
+            // renderEngine.applyCrate(crate);
         } else {
             glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-            RenderCrate crate;
-            renderEngine.buildCrate(crate);
-            crate.shaderStatuses = {{"dim", {1, crate.shaderStatuses["dim"].second}}};
-            renderEngine.applyCrate(crate);
+            // RenderCrate crate;
+            // renderEngine.buildCrate(crate);
+            // crate.shaderStatuses = {{"dim", {1, crate.shaderStatuses["dim"].second}}};
+            // renderEngine.applyCrate(crate);
         }
     } else if (state == GLFW_RELEASE) {
         escapePressed = false;
