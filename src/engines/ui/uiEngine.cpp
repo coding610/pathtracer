@@ -61,6 +61,12 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
             }
         }
 
+        for (auto& [key, value] : renderCrate.compShaderStatuses) {
+            if (ImGui::RadioButton(key, value.first)) {
+                renderCrate.compShaderStatuses[key].first = !renderCrate.compShaderStatuses[key].first;
+            }
+        }
+
         renderEngine.applyCrate(renderCrate);
     }
 

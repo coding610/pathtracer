@@ -57,16 +57,17 @@ void MovementModule::toggleFocus(const WindowEngine& windowEngine, RenderEngine&
         if (focused) {
             glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-            // RenderCrate crate;
-            // crate.shaderStatuses = {{"dim", {0, 1}}};
-            // renderEngine.applyCrate(crate);
+            RenderCrate crate;
+            renderEngine.buildCrate(crate);
+            crate.shaderStatuses = {{"dim", {0, 1}}};
+            renderEngine.applyCrate(crate);
         } else {
             glfwSetInputMode(windowEngine.getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-            // RenderCrate crate;
-            // renderEngine.buildCrate(crate);
-            // crate.shaderStatuses = {{"dim", {1, crate.shaderStatuses["dim"].second}}};
-            // renderEngine.applyCrate(crate);
+            RenderCrate crate;
+            renderEngine.buildCrate(crate);
+            crate.shaderStatuses = {{"dim", {1, 1}}};
+            renderEngine.applyCrate(crate);
         }
     } else if (state == GLFW_RELEASE) {
         escapePressed = false;
