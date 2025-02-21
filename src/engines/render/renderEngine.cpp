@@ -76,7 +76,7 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
 
     spdlog::info("Loading \t shaders \t [4.4]");
     for (const auto& pair : shaderStatuses) {
-        if (!pair.second.first) continue;
+        if (!pair.second.second) continue; // Use this as a load at start variable
 
         shaderModule.loadShader(pair.first, std::format("shaders/{}/vertex.glsl", pair.first).c_str(), std::format("shaders/{}/fragment.glsl", pair.first).c_str());
     }
@@ -117,17 +117,6 @@ void RenderEngine::update(const WindowEngine& windowEngine, const SceneEngine& s
 
             SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
             bufferModule.updateBuffer("spheres", sceneCrate.objects.data(), sceneCrate.objects.size() * sizeof(Sphere));
-        } else if (shaderInUse == std::string("dim")) {
-            glBindFramebuffer(GL_FRAMEBUFFER, dimFBO);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dimTexture, 0);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-            shaderModule.useShader(shaderInUse);
-
-            glm::vec2 dim = windowEngine.getDimensions();
-            shaderModule.setUniform("dim", "windowWidth", dim.x);
-            shaderModule.setUniform("dim", "windowHeight", dim.y);
-            shaderModule.setUniform("dim", "dimFactor", 0.5);
         }
 
         ////// Draw For Shader(s) To Draw On //////
