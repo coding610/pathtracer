@@ -18,14 +18,18 @@
 #include <engines/camera/cameraEngine.hpp>
 
 
+namespace UiUtils {
+
 struct UiCrate { };
+
+}
 
 class UiEngine {
 public:
     UiEngine();
     ~UiEngine();
 
-    void init(const UiCrate& crate, const WindowEngine& windowEngine);
+    void init(const UiUtils::UiCrate& crate, const WindowEngine& windowEngine);
     void update(RenderEngine& renderEngine, const SceneEngine& sceneEngine, CameraEngine& cameraEngine);
 
 private:

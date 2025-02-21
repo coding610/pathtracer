@@ -17,19 +17,24 @@
 
 class RenderEngine; // Forward Declaration
 
+namespace MovementUtils {
+
 struct MovementCrate {
     float sensitivity;
 };
+
+}
+
 
 class MovementModule {
 public:
     MovementModule();
     ~MovementModule();
 
-    void buildCrate(MovementCrate& crate);
-    void setCrate(const MovementCrate& crate);
+    void buildCrate(MovementUtils::MovementCrate& crate);
+    void setCrate(const MovementUtils::MovementCrate& crate);
 
-    void init(const MovementCrate& crate);
+    void init(const MovementUtils::MovementCrate& crate);
     bool update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction); // Returns focused.
 
 private:

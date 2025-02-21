@@ -12,10 +12,10 @@
 MovementModule::MovementModule() { }
 MovementModule::~MovementModule() { }
 
-void MovementModule::buildCrate(MovementCrate& crate) { crate = { sensitivity }; }
-void MovementModule::setCrate(const MovementCrate& crate) { sensitivity = crate.sensitivity; }
+void MovementModule::buildCrate(MovementUtils::MovementCrate& crate) { crate = { sensitivity }; }
+void MovementModule::setCrate(const MovementUtils::MovementCrate& crate) { sensitivity = crate.sensitivity; }
 
-void MovementModule::init(const MovementCrate& crate) { setCrate(crate); }
+void MovementModule::init(const MovementUtils::MovementCrate& crate) { setCrate(crate); }
 bool MovementModule::update(const WindowEngine& windowEngine, RenderEngine& renderEngine, glm::vec3& direction) {
     glm::vec2 deltaMouse; setDeltaMouse(windowEngine, deltaMouse);
     setCameraDirection(deltaMouse, direction);

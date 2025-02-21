@@ -29,30 +29,25 @@ void ShaderModule::setUniform(const char* shaderName, const char* uniformName, c
     glUniform1f(glGetUniformLocation(shaders.at(shaderName), uniformName), value);
 }
 
-void ShaderModule::loadShader(const char* name, const char* vertPath, const char* fragPath) {
-    spdlog::info("Compiling \t vertexShader \t [4.4.[{}].1]", name);
-    GLuint vertexShader = compileShader(name, vertPath, GL_VERTEX_SHADER);
-    spdlog::info("Compiling \t fragmentShader  [4.4.[{}].2]", name);
-    GLuint fragmentShader = compileShader(name, fragPath, GL_FRAGMENT_SHADER);
+void ShaderModule::loadShader(const char* name, const char* path, GLenum shaderType) {
+    spdlog::info("Compiling \t shaderPath \t [4.4.[{}].1]", name, name);
+    GLuint computeShader = compileShader(name, path, shaderType);
 
-    spdlog::info("Creating \t shaderProgram \t [4.4.[{}].3]", name);
+    spdlog::info("Creating \t shaderProgram \t [4.4.[{}].2]", name);
     GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
+    glAttachShader(shaderProgram, computeShader);
     glLinkProgram(shaderProgram);
 
     ////// Check for linking errors //////
-    spdlog::info("Verifying \t shaderProgram \t [4.4.[{}].4]", name);
+    spdlog::info("Verifying \t shaderProgram \t [4.4.[{}].3]", name);
     GLint success; glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         GLchar infoLog[512]; glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-        spdlog::critical("ShaderProgram initialization failed [4.4.[{}].4.E1]", name);
+        spdlog::critical("ShaderProgram initialization failed [4.4.[{}].3.E1]", name);
         std::cout << infoLog << std::endl; std::abort();
     }
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
+    glDeleteShader(computeShader);
     shaders[name] = shaderProgram;
 }
 

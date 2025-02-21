@@ -23,32 +23,43 @@ class CameraEngine; // Forward Declaration
 
 namespace RenderUtils {
 
-void setFullscreenQuad(GLuint& VAO, GLuint& VBO, GLuint& EBO);
-
-} // RenderEngineUtils
+struct Shader {
+    bool rendering;
+    bool loaded;
+    GLenum shaderType;
+};
 
 struct RenderCrate {
-    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses;
+    const char* shaderProject;
+    std::vector<const char*> shaderOrder;
+    std::unordered_map<const char*, RenderUtils::Shader> shaders;
 };
+
+void setFullscreenQuad(GLuint& VAO, GLuint& VBO, GLuint& EBO);
+const char* mapGlShaderEnum(const GLenum& shader);
+
+} // RenderEngineUtils
 
 class RenderEngine {
 public:
     RenderEngine();
     ~RenderEngine();
 
-    void init(const RenderCrate& crate, const SceneEngine& sceneEngine);
+    void init(const RenderUtils::RenderCrate& crate, const SceneEngine& sceneEngine);
     void update(const WindowEngine& windowEngine, const SceneEngine& sceneEngine, const CameraEngine& cameraEngine);
 
-    void buildCrate(RenderCrate& crate) const;
-    void applyCrate(const RenderCrate& crate);
+    void buildCrate(RenderUtils::RenderCrate& crate) const;
+    void applyCrate(const RenderUtils::RenderCrate& crate);
 
 private:
     ShaderModule shaderModule;
     BufferModule bufferModule;
 
-    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses; // id - { use program, loaded }, in order of render
+    const char* shaderProject;
+    std::vector<const char*> shaderOrder;
+    std::unordered_map<const char*, RenderUtils::Shader> shaders;
 
-    GLuint VAO, VBO, EBO;       // Move these to bufferModule
+    GLuint VAO, VBO, EBO;
 };
 
 #include <engines/camera/cameraEngine.hpp> // Forward Declaration

@@ -14,14 +14,14 @@ SceneEngine::~SceneEngine() {}
 ////////////////////
 ////// Crates //////
 ////////////////////
-void SceneEngine::buildCrate(SceneCrate& crate) const { crate.objects = objects; }
-void SceneEngine::applyCrate(const SceneCrate& crate) { objects = crate.objects; }
+void SceneEngine::buildCrate(SceneUtils::SceneCrate& crate) const { crate.objects = objects; }
+void SceneEngine::applyCrate(const SceneUtils::SceneCrate& crate) { objects = crate.objects; }
 
 
 //////////////////
 ////// Main //////
 //////////////////
-void SceneEngine::init(const SceneCrate& crate) { applyCrate(crate); }
+void SceneEngine::init(const SceneUtils::SceneCrate& crate) { applyCrate(crate); }
 void SceneEngine::update() {
     glfwPollEvents();
 }

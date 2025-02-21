@@ -16,6 +16,8 @@
 
 class RenderEngine; // Forward Declaration
 
+namespace CameraUtils {
+
 struct CameraCrate {
     glm::vec3 position;
     glm::vec3 target;
@@ -26,8 +28,6 @@ struct CameraBufferCrate {
     alignas(16) glm::vec3 position;
     alignas(16) glm::mat4x4 inverseViewProjection;
 };
-
-namespace CameraUtils {
 
 void calculateProjections(
     const CameraCrate& crate,
@@ -45,11 +45,11 @@ public:
     CameraEngine();
     ~CameraEngine();
 
-    void buildCrate(CameraBufferCrate& crate) const;
-    void buildCrate(CameraCrate& crate) const;
-    void applyCrate(const CameraCrate& crate);
+    void buildCrate(CameraUtils::CameraBufferCrate& crate) const;
+    void buildCrate(CameraUtils::CameraCrate& crate) const;
+    void applyCrate(const CameraUtils::CameraCrate& crate);
 
-    void init(const CameraCrate& crate, const WindowEngine& windowEngine);
+    void init(const CameraUtils::CameraCrate& crate, const WindowEngine& windowEngine);
     void update(const WindowEngine& windowEngine, RenderEngine& renderEngine);
 
 private:

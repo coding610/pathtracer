@@ -25,7 +25,7 @@ UiEngine::~UiEngine() { }
 //////////////////
 ////// Main //////
 //////////////////
-void UiEngine::init(const UiCrate& crate, const WindowEngine& windowEngine) {
+void UiEngine::init(const UiUtils::UiCrate& crate, const WindowEngine& windowEngine) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void) io;
@@ -53,11 +53,11 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
     ImGui::Begin("Shader");
 
     if (ImGui::CollapsingHeader("Shader Program")) { ImGui::Indent();
-        RenderCrate renderCrate; renderEngine.buildCrate(renderCrate);
+        RenderUtils::RenderCrate renderCrate; renderEngine.buildCrate(renderCrate);
 
-        for (auto& [key, value] : renderCrate.shaderStatuses) {
-            if (ImGui::RadioButton(key, value.first)) {
-                renderCrate.shaderStatuses[key].first = !renderCrate.shaderStatuses[key].first;
+        for (auto& [name, shader] : renderCrate.shaders) {
+            if (ImGui::RadioButton(name, shader.rendering)) {
+                renderCrate.shaders[name].rendering = !renderCrate.shaders[name].rendering;
             }
         }
 
@@ -69,7 +69,7 @@ void UiEngine::uiLayout(RenderEngine& renderEngine, const SceneEngine& sceneEngi
     ImGui::Begin("World");
     
     if (ImGui::CollapsingHeader("Camera")) { ImGui::Indent();
-        CameraCrate crate; cameraEngine.buildCrate(crate);
+        CameraUtils::CameraCrate crate; cameraEngine.buildCrate(crate);
 
         ImGui::SliderFloat3("Position", &crate.position.x, -10, 10);
         ImGui::SliderFloat3("Target", &crate.target.x, -20, 20);

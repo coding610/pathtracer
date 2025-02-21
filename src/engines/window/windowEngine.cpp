@@ -29,7 +29,7 @@ const char*           WindowEngine::getTitle()       const { return title; }
 //////////////////
 ////// Main //////
 //////////////////
-void WindowEngine::init(const WindowCrate& crate) {
+void WindowEngine::init(const WindowUtils::WindowCrate& crate) {
     ////// Members //////
     dimensions = crate.dimensions;
     title      = crate.title;

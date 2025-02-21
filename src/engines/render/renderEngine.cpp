@@ -40,6 +40,17 @@ void RenderUtils::setFullscreenQuad(GLuint& VAO, GLuint& VBO, GLuint& EBO) {
     glBindVertexArray(0);
 }
 
+const char* RenderUtils::mapGlShaderEnum(const GLenum& shader) {
+    switch (shader) {
+        case GL_VERTEX_SHADER: return "vertex";
+        case GL_FRAGMENT_SHADER: return "fragment";
+        case GL_COMPUTE_SHADER: return "compute";
+
+        default:
+            spdlog::critical("Failed mapping glShaderEnum [4.4.1]"); std::abort();
+    }
+}
+
 
 //////////////////////
 ////// Builders //////
@@ -51,12 +62,12 @@ RenderEngine::~RenderEngine() { }
 ////////////////////
 ////// Crates //////
 ////////////////////
-void RenderEngine::buildCrate(RenderCrate& crate) const { crate.shaderStatuses = shaderStatuses; }
-void RenderEngine::applyCrate(const RenderCrate& crate) {
+void RenderEngine::buildCrate(RenderUtils::RenderCrate& crate) const { crate.shaders = shaders; }
+void RenderEngine::applyCrate(const RenderUtils::RenderCrate& crate) {
     ////// This will update only provided keys //////
-    for (const auto& [key, value] : crate.shaderStatuses) {
-        if (shaderStatuses.find(key) != shaderStatuses.end()) {
-            shaderStatuses[key] = value;
+    for (const auto& [name, shader]: crate.shaders) {
+        if (shaders.find(name) != shaders.end()) {
+            shaders[name] = shader;
         }
     }
 }
@@ -65,8 +76,10 @@ void RenderEngine::applyCrate(const RenderCrate& crate) {
 //////////////////
 ////// Main //////
 //////////////////
-void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine) {
-    shaderStatuses = crate.shaderStatuses;
+void RenderEngine::init(const RenderUtils::RenderCrate& crate, const SceneEngine& sceneEngine) {
+    shaders = crate.shaders;
+    shaderOrder = crate.shaderOrder;
+    shaderProject = crate.shaderProject;
 
     spdlog::info("Creating \t fullscreenQuad  [4.1]");
     RenderUtils::setFullscreenQuad(VAO, VBO, EBO);
@@ -75,18 +88,18 @@ void RenderEngine::init(const RenderCrate& crate, const SceneEngine& sceneEngine
     spdlog::info("Initializing \t bufferModule \t [4.3]");
 
     spdlog::info("Loading \t shaders \t [4.4]");
-    for (const auto& pair : shaderStatuses) {
-        if (!pair.second.second) continue; // Use this as a load at start variable
+    for (const auto& [name, shader] : shaders) {
+        if (!shader.loaded) continue;
 
-        shaderModule.loadShader(pair.first, std::format("shaders/{}/vertex.glsl", pair.first).c_str(), std::format("shaders/{}/fragment.glsl", pair.first).c_str());
+        shaderModule.loadShader(name, std::format("shaders/{}/{}.glsl", shaderProject, RenderUtils::mapGlShaderEnum(shader.shaderType)).c_str(), shader.shaderType);
     }
 
     ////// Create buffers //////
     spdlog::info("Creating \t buffers \t [4.5]");
-    for (const auto& pair : shaderStatuses) { if (pair.second.first == 1 && pair.first == std::string("pathtracer")) {
-        bufferModule.createBuffer("camera", GL_UNIFORM_BUFFER, sizeof(CameraBufferCrate), 0);
+    for (const auto& [name, shader] : shaders) { if (shader.loaded == 1 && name == std::string("pathtracer")) {
+        bufferModule.createBuffer("camera", GL_UNIFORM_BUFFER, sizeof(CameraUtils::CameraBufferCrate), 0);
 
-        SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
+        SceneUtils::SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
         bufferModule.createBuffer("spheres", GL_SHADER_STORAGE_BUFFER, sceneCrate.objects.size() * sizeof(Sphere), 1);
     }}
 }
@@ -95,33 +108,32 @@ void RenderEngine::update(const WindowEngine& windowEngine, const SceneEngine& s
     ////// Clear screen //////
     glClear(GL_COLOR_BUFFER_BIT);
 
-
     ////// Using Shaders ///////
-    for (const auto& pair : shaderStatuses) { if (pair.second.first == 1) {
-        if (!pair.second.second) {
-            shaderStatuses[pair.first].second = 1;
-            shaderModule.loadShader(pair.first, std::format("shaders/{}/vertex.glsl", pair.first).c_str(), std::format("shaders/{}/fragment.glsl", pair.first).c_str());
+    for (const auto& name : shaderOrder) {
+        RenderUtils::Shader shader = shaders[name];
+        if (shader.rendering == false) continue;
+        if (!shader.loaded) {
+            shaders[name].loaded = 1;
+            shaderModule.loadShader(name, std::format("shaders/{}/{}.glsl", name, RenderUtils::mapGlShaderEnum(shader.shaderType)).c_str(), shader.shaderType);
         }
 
-        const char* shaderInUse = pair.first;
+        shaderModule.useShader(name);
 
-        if (shaderInUse == std::string("pathtracer")) {
-            shaderModule.useShader(shaderInUse);
+        if (name == std::string("pathtracerFragment")) {
             glm::vec2 dim = windowEngine.getDimensions();
-            shaderModule.setUniform("pathtracer", "windowWidth", dim.x);
-            shaderModule.setUniform("pathtracer", "windowHeight", dim.y);
-            shaderModule.setUniform("pathtracer", "aspectRatio", dim.x / dim.y);
+            shaderModule.setUniform("pathtracerFragment", "windowWidth", dim.x);
+            shaderModule.setUniform("pathtracerFragment", "windowHeight", dim.y);
+            shaderModule.setUniform("pathtracerFragment", "aspectRatio", dim.x / dim.y);
 
-            CameraBufferCrate cameraCrate; cameraEngine.buildCrate(cameraCrate);
-            bufferModule.updateBuffer("camera", &cameraCrate, sizeof(CameraBufferCrate));
+            CameraUtils::CameraBufferCrate cameraCrate; cameraEngine.buildCrate(cameraCrate);
+            bufferModule.updateBuffer("camera", &cameraCrate, sizeof(CameraUtils::CameraBufferCrate));
 
-            SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
+            SceneUtils::SceneCrate sceneCrate; sceneEngine.buildCrate(sceneCrate);
             bufferModule.updateBuffer("spheres", sceneCrate.objects.data(), sceneCrate.objects.size() * sizeof(Sphere));
         }
+    }
 
-        ////// Draw For Shader(s) To Draw On //////
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    }}
-
+    ////// Draw For Shader(s) To Draw On //////
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

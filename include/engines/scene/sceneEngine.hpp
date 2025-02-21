@@ -15,19 +15,23 @@ TODO:
 #include <models/object3D.hpp>
 
 
+namespace SceneUtils {
+
 struct SceneCrate {
     std::vector<Sphere> objects;
 };
+
+}
 
 class SceneEngine {
 public:
     SceneEngine();
     ~SceneEngine();
 
-    void buildCrate(SceneCrate& crate) const;
-    void applyCrate(const SceneCrate& crate);
+    void buildCrate(SceneUtils::SceneCrate& crate) const;
+    void applyCrate(const SceneUtils::SceneCrate& crate);
 
-    void init(const SceneCrate& crate);
+    void init(const SceneUtils::SceneCrate& crate);
     void update();
 
 private:

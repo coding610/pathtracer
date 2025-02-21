@@ -78,5 +78,5 @@ void castRay(Camera camera, inout Ray ray) {
 void main() {
     Camera camera = { cameraPosition, cameraInverseViewProjection };
     Ray ray; setRayDirection(camera, ray); castRay(camera, ray);
-    fragColor = vec4(ray.direction, 1);
+    fragColor = vec4(camera.position, 1);
 }

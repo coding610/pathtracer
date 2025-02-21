@@ -11,7 +11,7 @@
 ////// Utils //////
 ///////////////////
 void CameraUtils::calculateProjections(
-    const CameraCrate& crate,
+    const CameraUtils::CameraCrate& crate,
     const glm::vec2& dimensions,
     glm::mat4x4& projection,
     glm::mat4x4& view,
@@ -35,18 +35,18 @@ CameraEngine::~CameraEngine() { }
 ////////////////////
 ////// Crates //////
 ////////////////////
-void CameraEngine::buildCrate(CameraCrate& crate) const { crate = { position, target, fov }; }
-void CameraEngine::buildCrate(CameraBufferCrate& crate) const { crate = { position, inverseViewProjection }; }
-void CameraEngine::applyCrate(const CameraCrate& crate) { position = crate.position; target = crate.target; fov = crate.fov; }
+void CameraEngine::buildCrate(CameraUtils::CameraCrate& crate) const { crate = { position, target, fov }; }
+void CameraEngine::buildCrate(CameraUtils::CameraBufferCrate& crate) const { crate = { position, inverseViewProjection }; }
+void CameraEngine::applyCrate(const CameraUtils::CameraCrate& crate) { position = crate.position; target = crate.target; fov = crate.fov; }
 
 //////////////////
 ////// Main //////
 //////////////////
-void CameraEngine::init(const CameraCrate& crate, const WindowEngine& windowEngine) {
+void CameraEngine::init(const CameraUtils::CameraCrate& crate, const WindowEngine& windowEngine) {
     applyCrate(crate);
 
     spdlog::info("Initializing \t MovementModule  [2.1]");
-    MovementCrate movementCrate;
+    MovementUtils::MovementCrate movementCrate;
     movementCrate.sensitivity = 0.5;
     movementModule.init(movementCrate);
 

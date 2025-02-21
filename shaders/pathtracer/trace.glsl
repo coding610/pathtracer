@@ -1,4 +1,4 @@
-#version 450 core
+#version 450 coretra
 
 void setRayDirection(Camera camera, inout Ray ray) {
     vec4 clipCoords = vec4(texCoord, -1.0, 1.0);

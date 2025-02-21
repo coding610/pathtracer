@@ -13,10 +13,14 @@
 #include <glm/glm.hpp>
 
 
+namespace WindowUtils {
+
 struct WindowCrate {
     glm::vec2 dimensions;
     const char* title;
 };
+
+}
 
 class WindowEngine {
 public:
@@ -25,7 +29,7 @@ public:
     ~WindowEngine();
 
     /////// Main ///////
-    void init(const WindowCrate& crate);
+    void init(const WindowUtils::WindowCrate& crate);
     void update();
 
     ////// Getters //////
