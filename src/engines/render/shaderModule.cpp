@@ -56,28 +56,6 @@ void ShaderModule::loadShader(const char* name, const char* vertPath, const char
     shaders[name] = shaderProgram;
 }
 
-void ShaderModule::loadShader(const char* name, const char* compPath) {
-    spdlog::info("Compiling \t compPath \t [4.4.[{}].1]", name);
-    GLuint computeShader = compileShader(name, compPath, GL_COMPUTE_SHADER);
-
-    spdlog::info("Creating \t shaderProgram \t [4.4.[{}].2]", name);
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, computeShader);
-    glLinkProgram(shaderProgram);
-
-    ////// Check for linking errors //////
-    spdlog::info("Verifying \t shaderProgram \t [4.4.[{}].3]", name);
-    GLint success; glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512]; glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-        spdlog::critical("ShaderProgram initialization failed [4.4.[{}].3.E1]", name);
-        std::cout << infoLog << std::endl; std::abort();
-    }
-
-    glDeleteShader(computeShader);
-    shaders[name] = shaderProgram;
-}
-
 GLuint ShaderModule::compileShader(const char* name, const char* path, GLenum shaderType) {
     ////// Load File Contents //////
     std::ifstream file(path); std::stringstream buffer; buffer << file.rdbuf();

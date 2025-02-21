@@ -1,10 +1,10 @@
 #version 450 core
 
+in vec2 texCoord;
+out vec4 fragColor;
+
 
 /* --- START INCLUDED FILE: shaders/pathtracer/common.glsl --- */
-
-layout (local_size_x = 16, local_size_y = 16) in;
-layout (binding = 0, rgba32f) uniform image2D renderedImage;
 
 struct Camera {
     vec3 position;
@@ -61,7 +61,7 @@ layout(std430, binding = 1) buffer sphereBuffer {
 
 /* --- START INCLUDED FILE: shaders/pathtracer/trace.glsl --- */
 
-void setRayDirection(vec2 texCoord, Camera camera, inout Ray ray) {
+void setRayDirection(Camera camera, inout Ray ray) {
     vec4 clipCoords = vec4(texCoord, -1.0, 1.0);
     vec4 worldCoords = camera.inverseViewProjection * clipCoords;
     worldCoords /= worldCoords.w;
@@ -76,11 +76,7 @@ void castRay(Camera camera, inout Ray ray) {
 
 
 void main() {
-    ivec2 globalID = ivec2(gl_GlobalInvocationID.xy);
-    vec2 texCoord = vec2(globalID) / vec2(imageSize(renderedImage));
-
     Camera camera = { cameraPosition, cameraInverseViewProjection };
-    Ray ray = {{0, 0, 0}, {0, 0, 0}}; setRayDirection(texCoord, camera, ray); castRay(camera, ray);
-
-    imageStore(renderedImage, globalID, vec4(1, 0, 1, 1));
-};
+    Ray ray; setRayDirection(camera, ray); castRay(camera, ray);
+    fragColor = vec4(ray.direction, 1);
+}

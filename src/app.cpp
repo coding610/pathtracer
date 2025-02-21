@@ -36,9 +36,8 @@ App::App() {
 
     spdlog::info("Initializing \t renderEngine \t [4]");
     RenderCrate renderCrate;
-    renderCrate.shaderStatuses = {{"dim", {0, 1}}};
-    renderCrate.compShaderStatuses = {{"pathtracer", {1, 1}}};
-    renderEngine.init(renderCrate, windowEngine, sceneEngine);
+    renderCrate.shaderStatuses = {{"dim", {0, 0}}, {"pathtracer", {1, 1}}};
+    renderEngine.init(renderCrate, sceneEngine);
 
     spdlog::info("Initializing \t uiEngine \t [5]");
     UiCrate uiCrate;

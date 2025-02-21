@@ -23,14 +23,12 @@ class CameraEngine; // Forward Declaration
 
 namespace RenderUtils {
 
-// Todo: Move this to bufferModule
-void setRenderBuffers(GLuint& pathtracerFBO, GLuint& renderedTexture, GLuint& quadVAO, const glm::vec2& dimensions);
+void setFullscreenQuad(GLuint& VAO, GLuint& VBO, GLuint& EBO);
 
 } // RenderEngineUtils
 
 struct RenderCrate {
     std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses;
-    std::unordered_map<const char*, std::pair<bool, bool>> compShaderStatuses;
 };
 
 class RenderEngine {
@@ -38,7 +36,7 @@ public:
     RenderEngine();
     ~RenderEngine();
 
-    void init(const RenderCrate& crate, const WindowEngine& windowEngine, const SceneEngine& sceneEngine);
+    void init(const RenderCrate& crate, const SceneEngine& sceneEngine);
     void update(const WindowEngine& windowEngine, const SceneEngine& sceneEngine, const CameraEngine& cameraEngine);
 
     void buildCrate(RenderCrate& crate) const;
@@ -48,9 +46,11 @@ private:
     ShaderModule shaderModule;
     BufferModule bufferModule;
 
-    // id - { use program, loaded }, in order of render
-    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses;
-    std::unordered_map<const char*, std::pair<bool, bool>> compShaderStatuses; // id - { use program, loaded }, in order of render
+    std::unordered_map<const char*, std::pair<bool, bool>> shaderStatuses; // id - { use program, loaded }, in order of render
 
-    GLuint pathtracerFBO, renderedTexture, quadVAO;
+    GLuint VAO, VBO, EBO;       // Move these to bufferModule
+    GLuint dimFBO, dimTexture;  // Move these to bufferModule
+
 };
+
+#include <engines/camera/cameraEngine.hpp> // Forward Declaration

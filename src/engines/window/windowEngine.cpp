@@ -38,8 +38,8 @@ void WindowEngine::init(const WindowCrate& crate) {
     spdlog::info("Initializing \t GLFW \t\t [1.1]");
     if (!glfwInit()) { spdlog::critical("GLFW initialization failed [1.1.E1]"); std::abort(); }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     spdlog::info("Initializing \t window \t [1.1.1]");

@@ -21,7 +21,6 @@ public:
     ~ShaderModule();
 
     void loadShader(const char* name, const char* vertPath, const char* fragPath);
-    void loadShader(const char* name, const char* compPath);
     void useShader(const char* name);
     void setUniform(const char* shaderName, const char* uniformName, const float& value);
 
